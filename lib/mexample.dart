@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class Mexample extends StatefulWidget {
   _MexampleState createState() => _MexampleState();
@@ -14,28 +15,31 @@ String link2 =
 class _MexampleState extends State<Mexample> {
   void initState() {
     super.initState();
-    _html = getHtml(link1);
+    _fetch(link1);
   }
 
-  Future<String> _html;
-  Future<String> getHtml(link) async {
-    http.Response response = await http.get(link);
+  String _html;
+  int _len = 0;
+  void _fetch(String link) async {
+    final http.Response response = await http.get(link);
     log(response.statusCode.toString());
-    return response.body;
+    setState(() {
+      _html = response.body;
+      _len = response.body.length;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _html,
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.hasData) {
-            log(snapshot.data);
-            return Text(snapshot.data);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          return CircularProgressIndicator();
-        });
+    Text html_t = Text(
+      'length = $_len \n' + _html,
+      style: TextStyle(
+        fontSize: 12,
+      ),
+    );
+    return Expanded(
+        flex: 1,
+        child: SingleChildScrollView(
+            child: html_t, scrollDirection: Axis.vertical));
   }
 }
