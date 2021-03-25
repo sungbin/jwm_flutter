@@ -1,21 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
+import 'package:jwm/format/infomation.dart';
+
 class Mexample extends StatefulWidget {
   _MexampleState createState() => _MexampleState();
 }
 
-String link1 =
-    "http://www.encar.com/dc/dc_carsearchlist.do?method=sellcar&userId=jwm1992&carid=28890745&WT.hit=Search_%B8%C5%B9%B0%BA%B8%B1%E2#!";
-String link2 =
-    "http://www.encar.com/dc/dc_carsearchlist.do?method=sellcar&userId=pwr01000&carid=28202014&WT.hit=Search_%B8%C5%B9%B0%BA%B8%B1%E2#!";
+String car_info_url = 'http://115.138.171.148:40080/data/data.json';
 
 class _MexampleState extends State<Mexample> {
   void initState() {
     super.initState();
-    _fetch(link1);
+    _fetch(car_info_url);
   }
 
   String _html;
@@ -24,15 +25,17 @@ class _MexampleState extends State<Mexample> {
     final http.Response response = await http.get(link);
     log(response.statusCode.toString());
     setState(() {
-      _html = response.body;
-      _len = response.body.length;
+      _html = utf8.decode(response.bodyBytes);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    Information info = Information(_html);
+    log(info.user['jwm1992'].selled_car_list.toString());
     Text html_t = Text(
-      'length = $_len \n' + _html,
+      _html,
+      // info.user['jwm1992'].selled_car_list.toString(),
       style: TextStyle(
         fontSize: 12,
       ),
