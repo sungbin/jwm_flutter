@@ -8,6 +8,8 @@ import 'dart:io';
 
 import 'package:jwm/format/infomation.dart';
 
+import '../car_view.dart';
+
 class Mexample extends StatefulWidget {
   _MexampleState createState() => _MexampleState();
 }
@@ -15,15 +17,20 @@ class Mexample extends StatefulWidget {
 String car_info_url = 'http://115.138.171.148:40080/data/data.json';
 
 class _MexampleState extends State<Mexample> {
+  Information info = null;
   void initState() {
     super.initState();
     _fetch(car_info_url);
-    Timer(Duration(seconds: 5), () => print('done'));
+    Timer(Duration(seconds: 2), () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CarView(info: info)),
+      );
+    });
   }
 
   String _html;
   int _len = 0;
-  Information info = null;
   void _fetch(String link) async {
     final http.Response response = await http.get(link);
     log(response.statusCode.toString());
@@ -46,14 +53,14 @@ class _MexampleState extends State<Mexample> {
             fit: BoxFit.fitHeight,
           ),
         ),
-        Align(
-          alignment: FractionalOffset(0.5, 0.82),
-          child: Container(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-          ),
-        ),
+        // Align(
+        //   alignment: FractionalOffset(0.5, 0.82),
+        //   child: Container(
+        //     child: CircularProgressIndicator(
+        //       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
