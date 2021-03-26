@@ -22,10 +22,17 @@ class _MexampleState extends State<Mexample> {
     super.initState();
     _fetch(car_info_url);
     Timer(Duration(seconds: 2), () {
+      // Navigator.of(context).pop();
       Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CarView(info: info)),
-      );
+          context,
+          PageRouteBuilder(
+            pageBuilder: (c, a1, a2) => CarView(info: info),
+            transitionsBuilder: (c, anim, a2, child) =>
+                FadeTransition(opacity: anim, child: child),
+            transitionDuration: Duration(milliseconds: 2000),
+          )
+          // MaterialPageRoute(builder: (context) => CarView(info: info)),
+          );
     });
   }
 
@@ -40,10 +47,8 @@ class _MexampleState extends State<Mexample> {
     });
   }
 
-// TODO: spanish screenshot
   @override
   Widget build(BuildContext context) {
-    // log(info.user['jwm1992'].selled_car_list.toString());
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -53,14 +58,6 @@ class _MexampleState extends State<Mexample> {
             fit: BoxFit.fitHeight,
           ),
         ),
-        // Align(
-        //   alignment: FractionalOffset(0.5, 0.82),
-        //   child: Container(
-        //     child: CircularProgressIndicator(
-        //       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
