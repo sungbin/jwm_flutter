@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jwm/car_detail.dart';
 
 import 'format/selled_car.dart';
 import 'format/selling_car.dart';
@@ -15,44 +16,57 @@ class SellingCarTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.fromLTRB(3, 5, 3, 5),
-        child: Card(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(
-              _car_info.img.substring(0, _car_info.img.indexOf('impolicy')),
-              height: 120,
-              width: 170,
-              fit: BoxFit.cover,
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _car_info.kind1 + ': ' + _car_info.kind2,
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.start,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    _car_info.year + ' ' + _car_info.distance,
-                    style: TextStyle(fontSize: 11, color: Colors.black54),
-                    textAlign: TextAlign.start,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    _car_info.price,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.start,
-                  ),
-                ],
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CarDetail(_car_info)),
+            );
+          },
+          child: Card(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Hero(
+                tag: _car_info.img,
+                child: Image.network(
+                  _car_info.img.substring(0, _car_info.img.indexOf('impolicy')),
+                  height: 120,
+                  width: 170,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-          ],
-        )));
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _car_info.kind1 + ': ' + _car_info.kind2,
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      _car_info.year + ' ' + _car_info.distance,
+                      style: TextStyle(fontSize: 11, color: Colors.black54),
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      _car_info.price,
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
+        ));
   }
 }
 
@@ -88,12 +102,12 @@ class SelledCarTile extends StatelessWidget {
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.start,
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    _car_info.year + ' ' + _car_info.distance,
-                    style: TextStyle(fontSize: 11, color: Colors.black54),
-                    textAlign: TextAlign.start,
-                  ),
+                  // SizedBox(height: 5),
+                  // Text(
+                  //   _car_info.year + ' ' + _car_info.distance,
+                  //   style: TextStyle(fontSize: 11, color: Colors.black54),
+                  //   textAlign: TextAlign.start,
+                  // ),
                   SizedBox(height: 10),
                   Row(
                     children: [

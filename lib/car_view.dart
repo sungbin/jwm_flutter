@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:jwm/format/infomation.dart';
 import 'car_tile.dart';
@@ -6,7 +8,9 @@ import 'format/selling_car.dart';
 
 class CarView extends StatefulWidget {
   Information info;
-  CarView({this.info});
+  CarView(Information info) {
+    this.info = info;
+  }
 
   _CarViewState createState() => _CarViewState();
 }
@@ -40,7 +44,9 @@ class _CarViewState extends State<CarView> {
       centerTitle: true,
       leading: IconButton(
         icon: Icon(Icons.info),
-        onPressed: () {},
+        onPressed: () {
+          infoDialog(context);
+        },
       ),
       title: Text(
         _total_selling_no.toString() + '대',
@@ -54,15 +60,13 @@ class _CarViewState extends State<CarView> {
       centerTitle: true,
       leading: IconButton(
         icon: Icon(Icons.info),
-        onPressed: () {},
+        onPressed: () {
+          infoDialog(context);
+        },
       ),
       title: Text(
         _total_selled_no.toString() + '대',
       ),
-      actions: [
-        IconButton(icon: Icon(Icons.category_outlined), onPressed: () {}),
-        IconButton(icon: Icon(Icons.sort), onPressed: () {}),
-      ],
     ));
     appbar_list.add(AppBar(
       centerTitle: true,
@@ -121,5 +125,54 @@ class _CarViewState extends State<CarView> {
         ],
       ),
     );
+  }
+
+  infoDialog(context) {
+    // log('info Dialog: ' + _selectedIndex.toString());
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            //Dialog Main Title
+            title: Column(
+              children: <Widget>[
+                new Text(
+                  "찾아오시는 길",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ],
+            ),
+            //
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "회사명: 정원모터스",
+                  style: TextStyle(fontSize: 12),
+                ),
+                Text(
+                  "연락처: 054-446-4446",
+                  style: TextStyle(fontSize: 12),
+                ),
+                Text(
+                  "주소: 대구광역시 동구 반야월로 327",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("확인"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
   }
 }
