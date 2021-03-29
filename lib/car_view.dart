@@ -48,9 +48,7 @@ class _CarViewState extends State<CarView> {
       leading: IconButton(
           icon: Icon(Icons.info),
           onPressed: () {
-            // infoDialog(context);
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MapSample()));
+            infoDialog(context);
           }),
       title: Text(
         _total_selling_no.toString() + '대',
@@ -79,14 +77,12 @@ class _CarViewState extends State<CarView> {
       ),
     ));
     content_list.add(ListView.builder(
-        // padding: const EdgeInsets.all(10),
         padding: EdgeInsets.zero,
         itemCount: _total_selling_no,
         itemBuilder: (BuildContext context, int index) {
           return SellingCarTile(selling_car_list[index]);
         }));
     content_list.add(ListView.builder(
-        // padding: EdgeInsets.all(2),
         padding: EdgeInsets.zero,
         itemCount: _total_selled_no,
         itemBuilder: (BuildContext context, int index) {
@@ -152,20 +148,48 @@ class _CarViewState extends State<CarView> {
             //
             content: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "회사명: 정원모터스",
-                  style: TextStyle(fontSize: 12),
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "회사명: 정원모터스",
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      "연락처: 054-446-4446",
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      "주소: 대구광역시 동구 반야월로 327",
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MapSample()));
+                      }, // handle your image tap here
+                      child: Image.asset(
+                        'asset/jwm_location.png',
+                        fit: BoxFit.cover, // this is the solution for border
+                        // width: 110.0,
+                        // height: 110.0,
+                      ),
+                    ),
+                  ],
                 ),
                 Text(
-                  "연락처: 054-446-4446",
-                  style: TextStyle(fontSize: 12),
+                  "(각산역 1번 출구에서480m)",
+                  style: TextStyle(fontSize: 12, color: Colors.blueGrey),
                 ),
-                Text(
-                  "주소: 대구광역시 동구 반야월로 327",
-                  style: TextStyle(fontSize: 12),
-                ),
+                // MapSample(),
               ],
             ),
             actions: <Widget>[
@@ -188,38 +212,27 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   Completer<GoogleMapController> _controller = Completer();
+  List<Marker> _markers = <Marker>[];
 
   static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    target: LatLng(35.87206496584286, 128.72439087050742),
+    zoom: 15.4746,
   );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
 
   @override
   Widget build(BuildContext context) {
+    _markers.add(Marker(
+        markerId: MarkerId('SomeId'),
+        position: LatLng(35.87206496584286, 128.72439087050742),
+        infoWindow: InfoWindow(title: '정원모터스[대구광역시 동구 신서동 반야월로 327]')));
     return new Scaffold(
       body: GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: Text('To the lake!'),
-        icon: Icon(Icons.directions_boat),
-      ),
+          mapType: MapType.normal,
+          initialCameraPosition: _kGooglePlex,
+          markers: Set<Marker>.of(_markers),
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          }),
     );
-  }
-
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }
